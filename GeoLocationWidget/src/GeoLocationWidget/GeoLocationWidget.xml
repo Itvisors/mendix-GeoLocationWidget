@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<widget id="GeoLocationWidget.widget.GeoLocationWidget" needsEntityContext="true" xmlns="http://www.mendix.com/widget/1.0/">
+    <name>GeoLocationWidget</name>
+    <description>Use Google client library to get current location. The Google client library takes WiFi access points into account to determine the location.</description>
+
+    <icon></icon>
+
+    <properties>
+		<property key="buttonLabel" type="translatableString" required="true">
+            <caption>Label</caption>
+            <category>Button</category>
+            <description>The label to show on the button</description>
+            <translations>
+                <translation lang="en_GB">Get location</translation>
+                <translation lang="en_US">Get location</translation>
+                <translation lang="nl_NL">Bepaal locatie</translation>
+            </translations>
+
+        </property>
+        <property key="buttonClass" type="string" required="false">
+            <caption>Class</caption>
+            <category>Button</category>
+            <description>The class to use on the button. If not specified, btn-primary is used.</description> 
+        </property>
+		<property key="latAttr" type="attribute" required="true">
+            <caption>Latitude attribute</caption>
+            <category>Data source</category>
+            <description>Latitude attribute, must be a decimal</description> 
+            <attributeTypes>
+                <attributeType name="Decimal"/>
+            </attributeTypes>
+        </property>
+        <property key="longAttr" type="attribute" required="true">
+            <caption>Longitude attribute</caption>
+            <category>Data source</category>
+            <description>Longitude attribute, must be a decimal</description> 
+            <attributeTypes>
+                <attributeType name="Decimal"/>
+            </attributeTypes>
+        </property>
+        <property key="onChangeMF" type="microflow" required="false">
+            <caption>On change microflow</caption>
+            <category>Events</category>
+            <description>Microflow to be called when location is determined</description> 
+            <returnType type="Void"/>
+        </property>
+    </properties>
+</widget>
+
