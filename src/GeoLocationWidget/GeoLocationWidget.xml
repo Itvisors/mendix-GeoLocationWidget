@@ -19,12 +19,12 @@
         </property>
         <property key="buttonClass" type="string" required="false">
             <caption>Class</caption>
-            <category>Button</category>
+            <category>Styling</category>
             <description>The class to use on the button. If not specified, btn-primary is used.</description> 
         </property>
 		<property key="latAttr" type="attribute" required="true">
             <caption>Latitude attribute</caption>
-            <category>Data source</category>
+            <category>Location</category>
             <description>Latitude attribute, must be a decimal</description> 
             <attributeTypes>
                 <attributeType name="Decimal"/>
@@ -32,7 +32,7 @@
         </property>
         <property key="longAttr" type="attribute" required="true">
             <caption>Longitude attribute</caption>
-            <category>Data source</category>
+            <category>Location</category>
             <description>Longitude attribute, must be a decimal</description> 
             <attributeTypes>
                 <attributeType name="Decimal"/>
@@ -40,9 +40,22 @@
         </property>
         <property key="onChangeMF" type="microflow" required="false">
             <caption>On change microflow</caption>
-            <category>Events</category>
+            <category>Location</category>
             <description>Microflow to be called when location is determined</description> 
             <returnType type="Void"/>
+        </property>
+        <property key="doReverseGeocoding" type="boolean" defaultValue="true">
+            <caption>Do reverse geocoding</caption>
+            <category>Reverse Geocoding</category>
+            <description>Turn off to get the location latitude/longitude only.</description>
+        </property>
+		<property key="reverseGeocodingResultJson" type="attribute" required="false">
+            <caption>Reverse geocoding result JSON</caption>
+            <category>Reverse Geocoding</category>
+            <description>The raw response of the Google reverse geocoding is put on this attribute. Use an unlimited string!</description> 
+            <attributeTypes>
+                <attributeType name="String"/>
+            </attributeTypes>
         </property>
     </properties>
 </widget>

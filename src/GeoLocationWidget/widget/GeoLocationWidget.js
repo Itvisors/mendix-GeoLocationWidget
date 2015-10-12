@@ -1,6 +1,6 @@
 /*jshint undef: true, browser:true, nomen: true */
 /*jslint browser:true, nomen: true */
-/*global mx, console, define, require */
+/*global mx, define, require, console, google */
 /*
     GeoLocationWidget
     ========================
@@ -33,14 +33,11 @@ define([
     "dojo/text",
     "dojo/html",
     "dojo/_base/event",
-    "big/big",
-    "GeoLocationWidget/lib/jquery-1.11.2",
-    "dojo/text!GeoLocationWidget/widget/template/GeoLocationWidget.html"
-], function (declare, _WidgetBase, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, dojoLang, dojoText, dojoHtml, dojoEvent, Big, _jQuery, widgetTemplate) {
+    "dojo/request/script",
+    "big/big"
+], function (declare, _WidgetBase, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, dojoLang, dojoText, dojoHtml, dojoEvent, dojoScript, Big) {
     "use strict";
 
-    var $ = _jQuery.noConflict(true);
-    
     // Declare widget's prototype.
     return declare("GeoLocationWidget.widget.GeoLocationWidget", [ _WidgetBase ], {
 
@@ -52,6 +49,8 @@ define([
         latAttr: "",
         longAttr: "",
         onChangeMF: "",
+        doReverseGeocoding: true,
+        reverseGeocodingResultJson: "",
 
         // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
         _handles: null,
@@ -67,10 +66,10 @@ define([
 
         // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function () {
-            console.log(this.id + ".postCreate");
+            //console.log(this.id + ".postCreate");
             
             // Placeholder container
-            this._button = dom.div();
+            this._button = document.createElement("div");
             dojoClass.add(this._button, "btn");
             if (this.buttonClass) {
                 dojoClass.add(this._button, this.buttonClass);
@@ -82,14 +81,14 @@ define([
 
             // Add to widget node
             this.domNode.appendChild(this._button);
-            
+
             this._updateRendering();
             this._setupEvents();
         },
 
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function (obj, callback) {
-            console.log(this.id + ".update");
+            //console.log(this.id + ".update");
 
             this._contextObj = obj;
             this._resetSubscriptions();
@@ -122,13 +121,13 @@ define([
         // Attach events to HTML dom elements
         _setupEvents: function () {
             this.connect(this._button, "click", dojoLang.hitch(this, function (evt) {
-                console.log("GEO Location start getting location.");
+                //console.log("GEO Location start getting location.");
 
                 // The camera function has a success, failure and a reference to this.
                 navigator.geolocation.getCurrentPosition(
                     dojoLang.hitch(this, this._geolocationSuccess),
                     dojoLang.hitch(this, this._geolocationFailure),
-                    {timeout: 10000}
+                    {timeout: 10000, enableHighAccuracy: true}
                 );
             }));
         },
@@ -140,20 +139,45 @@ define([
 
         _geolocationSuccess: function (position) {
 
+            var geocoder,
+                latlng;
+            
             this._contextObj.set(this.latAttr, new Big(position.coords.latitude).round(8));
             this._contextObj.set(this.longAttr, new Big(position.coords.longitude).round(8));
-            this._executeMicroflow();
+            if (this.doReverseGeocoding) {
+                geocoder = new google.maps.Geocoder();
+                latlng = {lat: position.coords.latitude, lng: position.coords.longitude};
+                geocoder.geocode({
+                    "location": latlng
+                }, dojoLang.hitch(this, this._reverseGeoCodingSuccess));
+            } else {
+                this._executeMicroflow();
+            }
+        },
+        
+        _reverseGeoCodingSuccess: function (results, status) {
+            var resultString;
+            
+            if (status === google.maps.GeocoderStatus.OK) {
+                console.log("Reverse geocode OK");
+                console.dir(results);
+                resultString = JSON.stringify(results);
+                this._contextObj.set(this.reverseGeocodingResultJson, resultString);
+                this._executeMicroflow();
+            } else {
+                window.alert("Geocoder failed due to: " + status);
+            }
         },
 
         _geolocationFailure: function (error) {
 
-            console.log("GEO Location failure!");
-            console.log(error.message);
+            //console.log("GEO Location failure!");
+            //console.log(error.message);
 
             if (this._result) {
                 dojoHtml.set(this._result, "GEO Location failure...");
             } else {
-                this._result = dom.div();
+                this._result = document.createElement("div");
                 dojoHtml.set(this._result, "GEO Location failure...");
                 this.domNode.appendChild(this._result);
             }
