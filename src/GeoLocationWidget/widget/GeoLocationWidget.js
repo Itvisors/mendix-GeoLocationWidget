@@ -33,9 +33,8 @@ define([
     "dojo/text",
     "dojo/html",
     "dojo/_base/event",
-    "dojo/request/script",
-    "big/big"
-], function (declare, _WidgetBase, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, dojoLang, dojoText, dojoHtml, dojoEvent, dojoScript, Big) {
+    "dojo/request/script"
+], function (declare, _WidgetBase, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, dojoLang, dojoText, dojoHtml, dojoEvent, dojoScript) {
     "use strict";
 
     // Declare widget's prototype.
@@ -142,8 +141,8 @@ define([
             var geocoder,
                 latlng;
             
-            this._contextObj.set(this.latAttr, new Big(position.coords.latitude).round(8));
-            this._contextObj.set(this.longAttr, new Big(position.coords.longitude).round(8));
+            this._contextObj.set(this.latAttr, position.coords.latitude.toFixed(8));
+            this._contextObj.set(this.longAttr, position.coords.longitude.toFixed(8));
             if (this.doReverseGeocoding) {
                 geocoder = new google.maps.Geocoder();
                 latlng = {lat: position.coords.latitude, lng: position.coords.longitude};
