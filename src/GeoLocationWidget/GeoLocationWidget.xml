@@ -44,15 +44,28 @@
             <description>Microflow to be called when location is determined</description> 
             <returnType type="Void"/>
         </property>
-        <property key="doReverseGeocoding" type="boolean" defaultValue="true">
+        <property key="reverseGeoCodingAction" type="enumeration" defaultValue="firstResult">
             <caption>Do reverse geocoding</caption>
             <category>Reverse Geocoding</category>
-            <description>Turn off to get the location latitude/longitude only.</description>
+            <description>Reverse geocoding action.</description>
+            <enumerationValues>
+                <enumerationValue key="firstResult">First result in address</enumerationValue>
+                <enumerationValue key="fullResult">Full JSON result</enumerationValue>
+                <enumerationValue key="locationOnly">None, location only</enumerationValue>
+            </enumerationValues>
+        </property>
+		<property key="address" type="attribute" required="false">
+            <caption>Address</caption>
+            <category>Reverse Geocoding</category>
+            <description>Address to store result</description> 
+            <attributeTypes>
+                <attributeType name="String"/>
+            </attributeTypes>
         </property>
 		<property key="reverseGeocodingResultJson" type="attribute" required="false">
             <caption>Reverse geocoding result JSON</caption>
             <category>Reverse Geocoding</category>
-            <description>The raw response of the Google reverse geocoding is put on this attribute. Use an unlimited string!</description> 
+            <description>The full JSON response of the Google reverse geocoding is put on this attribute. Use an unlimited string!</description> 
             <attributeTypes>
                 <attributeType name="String"/>
             </attributeTypes>

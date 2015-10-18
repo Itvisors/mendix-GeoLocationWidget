@@ -143,14 +143,14 @@ define([
             
             this._contextObj.set(this.latAttr, position.coords.latitude.toFixed(8));
             this._contextObj.set(this.longAttr, position.coords.longitude.toFixed(8));
-            if (this.doReverseGeocoding) {
+            if (this.reverseGeoCodingAction === "locationOnly") {
+                this._executeMicroflow();
+            } else {
                 geocoder = new google.maps.Geocoder();
                 latlng = {lat: position.coords.latitude, lng: position.coords.longitude};
                 geocoder.geocode({
                     "location": latlng
                 }, dojoLang.hitch(this, this._reverseGeoCodingSuccess));
-            } else {
-                this._executeMicroflow();
             }
         },
         
@@ -160,8 +160,14 @@ define([
             if (status === google.maps.GeocoderStatus.OK) {
                 console.log("Reverse geocode OK");
                 console.dir(results);
-                resultString = JSON.stringify(results);
-                this._contextObj.set(this.reverseGeocodingResultJson, resultString);
+                if (this.reverseGeoCodingAction === "fullResult") {
+                    resultString = JSON.stringify(results);
+                    this._contextObj.set(this.reverseGeocodingResultJson, resultString);
+                } else {
+                    if (results && results.length && results[0]) {
+                        this._contextObj.set(this.address, results[0].formatted_address);
+                    }
+                }
                 this._executeMicroflow();
             } else {
                 window.alert("Geocoder failed due to: " + status);
