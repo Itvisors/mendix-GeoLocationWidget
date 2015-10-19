@@ -17,11 +17,6 @@
             </translations>
 
         </property>
-        <property key="buttonClass" type="string" required="false">
-            <caption>Class</caption>
-            <category>Styling</category>
-            <description>The class to use on the button. If not specified, btn-primary is used.</description> 
-        </property>
 		<property key="latAttr" type="attribute" required="true">
             <caption>Latitude attribute</caption>
             <category>Location</category>
@@ -44,6 +39,34 @@
             <description>Microflow to be called when location is determined</description> 
             <returnType type="Void"/>
         </property>
+        <property key="apiAccessKey" type="string" required="false">
+            <caption>Maps API Access Key</caption>
+            <category>Map</category>
+            <description>The Google Maps JavaScript API key.</description>
+        </property>        
+        <property key="markerDisplayAttr" type="attribute" required="false">
+            <caption>Marker attribute</caption>
+            <category>Map</category>
+            <description>The attribute that will be displayed in the marker info bubble. (Not required)</description>
+            <attributeTypes>
+                <attributeType name="String"/> 
+            </attributeTypes>
+        </property>
+        <property key="defaultLat" type="string" defaultValue="0.0">
+            <caption>Default latitude</caption>
+            <category>Map</category>
+            <description>Default latitude for the map to start at.</description> 
+        </property>
+        <property key="defaultLng" type="string" defaultValue="0.0">
+            <caption>Default longitude</caption>
+            <category>Map</category>
+            <description>Default longitude for the map to start at.</description> 
+        </property>
+        <property key="defaultZoom" type="integer" defaultValue="15">
+            <caption>Default zoom level</caption>
+            <category>Map</category>
+            <description>The default zoom level used when creating the map. 1 is the whole world, 15 is city level, 20 is house level.</description> 
+        </property>        
         <property key="reverseGeoCodingAction" type="enumeration" defaultValue="firstResult">
             <caption>Do reverse geocoding</caption>
             <category>Reverse Geocoding</category>
@@ -69,6 +92,16 @@
             <attributeTypes>
                 <attributeType name="String"/>
             </attributeTypes>
+        </property>
+        <property key="buttonClass" type="string" required="false">
+            <caption>Button class</caption>
+            <category>Styling</category>
+            <description>The class to use on the button. If not specified, btn-primary is used.</description> 
+        </property>
+        <property key="mapClass" type="string" required="false">
+            <caption>Map class</caption>
+            <category>Styling</category>
+            <description>The class to use on the map container. If not specified, the map is set to 100% width and 350px height.</description> 
         </property>
     </properties>
 </widget>

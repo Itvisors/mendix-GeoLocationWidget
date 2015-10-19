@@ -1203,3 +1203,25 @@ body .mx-header .mx-sidebartoggle {
 .templategrid-profilecard .templategrid-profilecard-subtitle {
   /* Styles here */
 }
+
+/* Custom styling*/
+.profile-desktop .mapcontainer {
+  height: 350px;
+}
+
+@media (min-width: 992px) {
+  .profile-desktop .mapcontainer {
+    height: 700px;
+  }
+}
+.profile-tablet .mapcontainer {
+  height: 450px;
+}
+
+.profile-phone .mapcontainer {
+  height: 250px;
+}
+
+.mapcontainer {
+  width: 100%;
+}
