@@ -1,90 +1,54 @@
-# App Store Widget Boilerplate
+# Geo location widget
 
-This boilerplate gives you all you need to start a new custom widget for Mendix
-5.6.0 and up.
-
-The boilerplate contains:
-- Directory structure
-- Readme.md
-- License
-- JavaScript source
-- XSD for package.xml, to configure properties of the widget, visible inside the
- Mendix business modeler
-
-## Contributing
-
-For more information on contributing to this repository visit [Contributing to a GitHub repository](https://world.mendix.com/display/howto50/Contributing+to+a+GitHub+repository)!
+Determine current location of the device. Find closest address to the location using reverse geocoding.
 
 ## Typical usage scenario
 
-Use this template to start building a widget for Mendix 5.
-Alter this README.md file and describe what your widget does.
+Determine current location of the device. This widget uses the Google client library to get the current location, which takes WiFi access points into account to determine the location.
+
+The widget also shows the location on a map and allows the user to drag the marker.
+
+Optionally, the location can be reverse geocoded into an address.
  
-## Description
 
-The javascript inside the widget has examples of:
-- Using CSS within a widget
-- Using templating
-- Loading external library's
-- DOM manipulation
-- Event attaching
-- Loading data
-- Executing microflow and sending data
-- Working with the context object, which is an object in the current context
-(e.g. the one displayed in a DataView).
+##Features And Limitations
 
-### Dojo AMD module list
+- Determine actual device location
+- Show location on the map
+- User can drag the marker.
+- Marker location can be reverse geocoded into an address.
+- Full reverse geocoding result can be saved for processing in a microflow
+- Call a microflow when location was determined or changed.
+- Google JavaScript API is used, no dependency on PhoneGap/Cordova
 
-The JavaScript contains an extensive list of modules that may be used to build a
-widget. It is best to reduce this list to what is actually used. Use JSHint to
-help identify errors and problems. 
+##Installation
 
-** Be sure to keep the module name array and the parameter list of the anonymous
-function below the module list in sync! **
+Normal installation using the App Store
 
-The following modules are necessary for all widgets:
-- dojo/_base/declare
-- mxui/widget/_WidgetBase
-- dijit/_Widget
+##Dependencies
+ 
+- Mendix 5.19.0 Environment
+- Mendix Google Maps widget must also be present in the project because this widget depends on it.. 
 
-If your widget does not use an HTML template:
-- Remove dijit/_TemplatedMixin from the module list
-- Remove _Templated from the parameter list of the anonymous function below the module list
-- Remove _Templated from the parameter list of the declare call
-- Remove the templates folder
+##Properties
 
-If your widget does not need jQuery:
-- Remove WidgetName/widget/lib/jquery from the module list
-- Remove _jQuery from the parameter list of the anonymous function below the module list
-- Remove _jQuery from the parameter list of the declare call
-- Remove jquery.js from src\WidgetName\widget\lib\ Or remove the lib folder if you don't include external libraries in the widget.
+###Button
+A fixed, translatable, label can be set for the button
 
-### AMD caveats
-Working with jQuery can be difficult due to the fact that jquery does not adhere to the AMD standard correctly. Check out [Pull Request #13](https://github.com/mendix/AppStoreWidgetBoilerplate/pull/13) or the [Dojo AMD documentation](http://dojotoolkit.org/documentation/tutorials/1.10/modules/index.html) for details.
+###Styling
 
-## Migrating a widget to Dojo AMD
+####Button class
+Optional, specify a class to be used on the button. If not specified, btn-primary is used.
 
-A widget that uses Dojo AMD may not refer to functions like *dojo.forEach* etc. 
-All necessary modules must be declared on the module list at the top of the source.
+####Map class
+This class is set on the map container. Define this class in your CSS to set the dimensions of the map. If not specified, the map is set to 100% width and 350px height.
 
-Replacing all 'old' Dojo calls in an existing source can be a bit of a pain.
+####Location
+The latitude/longitude attributes must be Decimals. Specify the microflow to be called when the location changes.
 
-Here is a list of commonly used functions and their new counterpart:
+####Reverse geocoding
+Specify whether to perform reverse geocoding and the way to handle the result. In most situations, using the formatted address of the first result will be sufficient. If required, the full result JSON data can be saved on the object for processing in your own logic.
 
-Old | New
----------- |---------- 
-mxui.dom              | domMx
-dojo.byId             | dom.byId
-dojo.query            | document.querySelector
-dojo.forEach          | dojoArray.forEach
-dojo.hitch            | lang.hitch
-dojo.addClass         | domClass.add
-dojo.removeClass      | domClass.remove
-dojo.hasClass         | domClass.contains
-dojo.replaceClass     | domClass.replace
-dojo.empty            | domConstruct.empty
-dojo.place            | domConstruct.place 
-dojo.on               | on
-dojo.window           | win
-  
-The referenced modules are in the module list of the boilerplate JavaScript.
+####Map
+Specify the Google API key to use. Usually only necessary when you want to track your API usage or exceed the free usage limits.
+
