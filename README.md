@@ -52,3 +52,4 @@ Specify whether to perform reverse geocoding and the way to handle the result. I
 ####Map
 Specify the Google API key to use. Usually only necessary when you want to track your API usage or exceed the free usage limits.
 
+Known issue: Currently the API key does not work.
