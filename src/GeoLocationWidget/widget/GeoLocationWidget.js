@@ -263,8 +263,8 @@ define([
                 lng;
 
             if (this._contextObj) {
-                lat = this._contextObj.get(this.latAttr);
-                lng = this._contextObj.get(this.longAttr);
+                lat = this._contextObj.get(this.latAttr).toFixed(8);
+                lng = this._contextObj.get(this.longAttr).toFixed(8);
             }
             if (lat === null || lat === undefined) {
                 lat = 0;
