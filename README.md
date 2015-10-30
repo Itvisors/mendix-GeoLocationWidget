@@ -27,7 +27,7 @@ Normal installation using the App Store
 
 ##Dependencies
  
-- Mendix 5.19.0 Environment
+- Mendix 5.21.0 Environment
 - Mendix Google Maps widget must also be present in the project because this widget depends on it.. 
 
 ##Properties
