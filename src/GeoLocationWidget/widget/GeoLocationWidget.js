@@ -44,7 +44,7 @@ define([
         onChangeMF: "",
         doReverseGeocoding: true,
         reverseGeocodingResultJson: "",
-        apiKey: "",
+        apiAccessKey: "",
 
         // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
         _handles: null,
@@ -66,8 +66,8 @@ define([
 
             if (google && !google.maps) {
                 var params = "sensor=true";
-                if (this.apiKey !== "") {
-                    params += "&key=" + this.apiKey;
+                if (this.apiAccessKey !== "") {
+                    params += "&key=" + this.apiAccessKey;
                 }
                 google.load("maps", 3, {
                     other_params: params,
