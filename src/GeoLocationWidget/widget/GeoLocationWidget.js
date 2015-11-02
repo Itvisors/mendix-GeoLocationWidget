@@ -27,8 +27,8 @@ define([
     "dojo/_base/lang",
     "dojo/html",
     "dojo/_base/event",
-    "GoogleMaps/lib/googlemaps!"
-], function (declare, _WidgetBase, dojoClass, dojoStyle, dojoLang, dojoHtml, dojoEvent, googleMaps) {
+    "//www.google.com/jsapi"
+], function (declare, _WidgetBase, dojoClass, dojoStyle, dojoLang, dojoHtml, dojoEvent) {
     "use strict";
 
     // Declare widget's prototype.
@@ -44,6 +44,7 @@ define([
         onChangeMF: "",
         doReverseGeocoding: true,
         reverseGeocodingResultJson: "",
+        apiAccessKey: "",
 
         // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
         _handles: null,
@@ -58,10 +59,26 @@ define([
         constructor: function () {
             this._handles = [];
         },
-
+        
         // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function () {
             //console.log(this.id + ".postCreate");
+
+            if (google && !google.maps) {
+                var params = "sensor=true";
+                if (this.apiAccessKey !== "") {
+                    params += "&key=" + this.apiAccessKey;
+                }
+                google.load("maps", 3, {
+                    other_params: params,
+                    callback: dojoLang.hitch(this, this.setupWidget)
+                });
+            } else if (google && google.maps) {
+                dojoLang.hitch(this, this.setupWidget);
+            }
+        },
+        
+        setupWidget: function () {
             
             // Placeholder container
             this._mapContainer = document.createElement("div");
