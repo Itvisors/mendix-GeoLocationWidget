@@ -74,7 +74,7 @@ define([
                     callback: dojoLang.hitch(this, this.setupWidget)
                 });
             } else if (google && google.maps) {
-                dojoLang.hitch(this, this.setupWidget);
+                this.setupWidget();
             }
         },
         
@@ -272,6 +272,7 @@ define([
                     style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR
                 }
             });
+            this._showMarker();
 
         },
         
