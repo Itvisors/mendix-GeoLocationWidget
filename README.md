@@ -20,6 +20,7 @@ Optionally, the location can be reverse geocoded into an address.
 - Full reverse geocoding result can be saved for processing in a microflow
 - Call a microflow when location was determined or changed.
 - Google JavaScript API is used, no dependency on PhoneGap/Cordova
+- Works with Decimal attributes only
 
 ##Installation
 
@@ -28,7 +29,6 @@ Normal installation using the App Store
 ##Dependencies
  
 - Mendix 5.21.0 Environment
-- Mendix Google Maps widget must also be present in the project because this widget depends on it.. 
 
 ##Properties
 
