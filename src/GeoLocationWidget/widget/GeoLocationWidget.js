@@ -223,7 +223,7 @@ define([
             latLng = this._createLatLng();
             this._marker.setPosition(latLng);
             this._googleMap.panTo(latLng);
-            if (this.markerDisplayAttr) {
+            if (this.markerDisplayAttr && this._contextObj) {
                 this._marker.setTitle(this._contextObj.get(this.markerDisplayAttr));
             }
         },
