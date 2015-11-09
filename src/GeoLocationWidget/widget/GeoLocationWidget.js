@@ -27,7 +27,7 @@ define([
     "dojo/_base/lang",
     "dojo/html",
     "dojo/_base/event",
-    "//www.google.com/jsapi"
+    "GeoLocationWidget/lib/jsapi" 
 ], function (declare, _WidgetBase, dojoClass, dojoStyle, dojoLang, dojoHtml, dojoEvent) {
     "use strict";
 
