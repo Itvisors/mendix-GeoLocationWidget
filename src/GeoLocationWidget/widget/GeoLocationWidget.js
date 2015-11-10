@@ -69,6 +69,9 @@ define([
                 if (this.apiAccessKey !== "") {
                     params += "&key=" + this.apiAccessKey;
                 }
+                if (google.loader && google.loader.Secure === false) {
+                    google.loader.Secure = true;
+                }
                 google.load("maps", 3, {
                     other_params: params,
                     callback: dojoLang.hitch(this, this.setupWidget)
