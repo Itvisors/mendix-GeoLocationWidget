@@ -27,7 +27,7 @@ define([
     "dojo/_base/lang",
     "dojo/html",
     "dojo/_base/event",
-    "GeoLocationWidget/lib/jsapi" 
+    "GeoLocationWidget/lib/jsapi"
 ], function (declare, _WidgetBase, dojoClass, dojoStyle, dojoLang, dojoHtml, dojoEvent) {
     "use strict";
 
@@ -300,11 +300,12 @@ define([
         _executeMicroflow: function () {
 
             if (this.onChangeMF && this._contextObj) {
-                mx.processor.xasAction({
-                    error       : function () {},
-                    actionname  : this.onChangeMF,
-                    applyto     : "selection",
-                    guids       : [this._contextObj.getGuid()]
+                mx.data.action({
+                    params      : {
+                        actionname  : this.onChangeMF,
+                        applyto     : "selection",
+                        guids       : [this._contextObj.getGuid()]
+                    }
                 });
             }
         },
