@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<widget id="GeoLocationWidget.widget.GeoLocationOnlyWidget" needsEntityContext="true" offlineCapable="true" xmlns="http://www.mendix.com/widget/1.0/">
+    <name>Geo location only widget</name>
+    <description>Use Google client library to get current location. The Google client library takes WiFi access points into account to determine the location.</description>
+
+    <icon>iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2RpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDozRjE4NkRCRkVCN0JFMDExODBERUJDM0QxRjY2MzNCMSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo0MTkyRDM4Q0YzNTUxMUUwQjdGMUEyQTQ5RDQ1QjFFNyIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo0MTkyRDM4QkYzNTUxMUUwQjdGMUEyQTQ5RDQ1QjFFNyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IFdpbmRvd3MiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoyNTdGMTgxMjE3OTlFMDExODdDNzlFODg5MTFBNzhFMyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDozRjE4NkRCRkVCN0JFMDExODBERUJDM0QxRjY2MzNCMSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PvvZ/3gAAAJ8SURBVHjazJhBZ0NBEMfzmiillFBC6AcoJZR+gBJKyPfIteQUeg0lhBBCz1VCeymlh+qplJJDLz2F0miFRCtRSiudZVJrzGb37eyrDH/xsm9mf2/f7rzZjWazWUpiURSJ/G39r6SW3DKCkVuHn31QGVQA5UB50AD0BnoEXYBuQFPREMcR2BqoChopdweN8P41n/7jwu2A+o5gVH30TwYQrAT69ISb6xPjhAUE2zPATUBt0AFoC/tU87AIaoDeDZB7wQDBsqAh09E5LoxFpnxPGN8htgUBrDMdHGvtLnbIxKiLAfEpv0jgLrnH1dokjoqblQJWmDmXJ/ekcYQeQN/4e4j/66by5iuJV5ECXpKAbQbu1rBibxnIGrnnUgr4QgIWSXvNklZqBHCHtL9IAen8y5H2vkNy1i2N0+BvHtoAbcUCfUVjcp23+NP2H9DHgvixq5kpk9d0G1j8B8wDbyyIHxtwzMwh3U4t/rR9m4zaVFTNgF1ZVrGqUO4M8++eqWDoorqSLpImkwdzTKpR5VQP7+nhNZcHaVZoSgFLzMiceX5JWkyskhRw1VAo1AN8i1Xc1RDFgikZq2pm0wKmVmzH4H8UstyaGDrR68F56bWJe5VjQz0498uGLFirwkqaqhq6ok5rq1Sqnr7CQ+5Jdsl31EffuEVNbFfXEAI2kt52qmT77An3jP7JAS5I3i4qJb5x1yA7MeE6vicbvoDqVT05wj1xrzZRQIQsMBX3jNm5FSRnQ96Ajgm8Kj28EgEi5LUB7jrE6VoIwBxT8QwdjkX+DTCFh5g6YDnU+WQoQL0gbYU8QA0JqPYfXdNJqi9gtOyn/JmU0KQPaLNfAQYAPE/Wb8Si9KIAAAAASUVORK5CYII=
+</icon>
+
+    <properties>
+		<property key="buttonLabel" type="translatableString" required="true">
+            <caption>Label</caption>
+            <category>Button</category>
+            <description>The label to show on the button</description>
+            <translations>
+                <translation lang="en_GB">Get location</translation>
+                <translation lang="en_US">Get location</translation>
+                <translation lang="nl_NL">Bepaal locatie</translation>
+            </translations>
+        </property>
+		<property key="latAttr" type="attribute" required="true">
+            <caption>Latitude attribute</caption>
+            <category>Location</category>
+            <description>Latitude attribute, must be a decimal</description> 
+            <attributeTypes>
+                <attributeType name="Decimal"/>
+            </attributeTypes>
+        </property>
+        <property key="longAttr" type="attribute" required="true">
+            <caption>Longitude attribute</caption>
+            <category>Location</category>
+            <description>Longitude attribute, must be a decimal</description> 
+            <attributeTypes>
+                <attributeType name="Decimal"/>
+            </attributeTypes>
+        </property>
+        <property key="buttonClass" type="string" required="false">
+            <caption>Button class</caption>
+            <category>Styling</category>
+            <description>The class to use on the button. If not specified, btn-primary is used.</description> 
+        </property>
+    </properties>
+</widget>
+

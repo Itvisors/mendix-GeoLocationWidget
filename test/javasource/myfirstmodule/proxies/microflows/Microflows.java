@@ -15,6 +15,19 @@ public class Microflows
 {
 	// These are the microflows for the MyFirstModule module
 
+	public static void aCT_Location_NewLocationOnly(IContext context)
+	{
+		try
+		{
+			Map<String, Object> params = new HashMap<String, Object>();
+			Core.execute(context, "MyFirstModule.ACT_Location_NewLocationOnly", params);
+		}
+		catch (CoreException e)
+		{
+			throw new MendixRuntimeException(e);
+		}
+	}
+
 	public static void oCh_Location_LocationSet(IContext context, myfirstmodule.proxies.Location _location)
 	{
 		try
