@@ -1,12 +1,12 @@
 /*jshint undef: true, browser:true, nomen: true */
 /*jslint browser:true, nomen: true */
-/*global mx, define, require, console, google */
+/*global mx, define, require, console, google, logger */
 /*
     GeoLocationWidget
     ========================
 
     @file      : GeoLocationWidget.js
-    @version   : 1.0
+    @version   : 1.2.2
     @author    : Marcel Groeneweg
     @date      : Sun, 11 Oct 2015 07:05:38 GMT
     @copyright : 
@@ -18,7 +18,6 @@
     This widget depends on the original GoogleMaps widget for the AMD loader. 
 */
 
-// Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
 define([
     "dojo/_base/declare",
     "mxui/widget/_WidgetBase",
@@ -63,25 +62,43 @@ define([
         // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function () {
             //console.log(this.id + ".postCreate");
+        },
 
-            if (google && !google.maps) {
-                var params = "sensor=true";
-                if (this.apiAccessKey !== "") {
-                    params += "&key=" + this.apiAccessKey;
-                }
+        // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
+        update: function (obj, callback) {
+            //console.log(this.id + ".update");
+            
+            this._contextObj = obj;
+            this._resetSubscriptions();
+
+            if (!google) {
+                console.warn("Google JSAPI is not loaded, exiting!");
+                callback();
+                return;
+            }
+            
+            if (google.maps) {
+                this.setupWidget(callback);
+            } else {
+                logger.debug(this.id + ".update load Google maps");
+                var params = (this.apiAccessKey !== "") ? "key=" + this.apiAccessKey : "";
                 if (google.loader && google.loader.Secure === false) {
                     google.loader.Secure = true;
                 }
+                window._googleMapsLoading = true;
                 google.load("maps", 3, {
                     other_params: params,
-                    callback: dojoLang.hitch(this, this.setupWidget)
+                    callback: dojoLang.hitch(this, function () {
+                        logger.debug(this.id + ".update load Google maps callback");
+                        window._googleMapsLoading = false;
+                        this.setupWidget(callback);
+                    })
                 });
-            } else if (google && google.maps) {
-                this.setupWidget();
             }
+
         },
         
-        setupWidget: function () {
+        setupWidget: function (callback) {
             
             // Placeholder container
             this._mapContainer = document.createElement("div");
@@ -110,26 +127,18 @@ define([
             // Add to widget node
             this.domNode.appendChild(this._button);
 
-            this._updateRendering();
             this._setupEvents();
-
-            if (google.maps) {
-                this._loadMap();
-            } else {
-                window[this.id + "_mapsCallback"] = dojoLang.hitch(this, function () {
-                    this._loadMap();
-                });
-            }
-        },
-
-        // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
-        update: function (obj, callback) {
-            //console.log(this.id + ".update");
-
-            this._contextObj = obj;
-            this._resetSubscriptions();
-            this._updateRendering();
-
+                        
+            this._googleMap = new google.maps.Map(this._mapContainer, {
+                zoom: this.defaultZoom,
+                center: new google.maps.LatLng(this.defaultLat, this.defaultLng),
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                mapTypeControlOption: {
+                    style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR
+                }
+            });
+            this._showMarker();
+            
             callback();
         },
 
@@ -263,20 +272,6 @@ define([
                 dojoHtml.set(this._result, "GEO Location failure...");
                 this.domNode.appendChild(this._result);
             }
-        },
-
-        _loadMap: function () {
-                        
-            this._googleMap = new google.maps.Map(this._mapContainer, {
-                zoom: this.defaultZoom,
-                center: new google.maps.LatLng(this.defaultLat, this.defaultLng),
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                mapTypeControlOption: {
-                    style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR
-                }
-            });
-            this._showMarker();
-
         },
         
         _createLatLng: function () {
