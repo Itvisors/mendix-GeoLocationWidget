@@ -9,13 +9,13 @@
     @version   : 1.2.2
     @author    : Marcel Groeneweg
     @date      : Sun, 11 Oct 2015 07:05:38 GMT
-    @copyright : 
+    @copyright :
     @license   : Apache 2
 
     Documentation
     ========================
     Use Google client library to get current location. The Google client library takes WiFi access points into account to determine the location.
-    This widget depends on the original GoogleMaps widget for the AMD loader. 
+    This widget depends on the original GoogleMaps widget for the AMD loader.
 */
 
 define([
@@ -58,7 +58,7 @@ define([
         constructor: function () {
             this._handles = [];
         },
-        
+
         // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function () {
             //console.log(this.id + ".postCreate");
@@ -67,7 +67,7 @@ define([
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function (obj, callback) {
             //console.log(this.id + ".update");
-            
+
             this._contextObj = obj;
             this._resetSubscriptions();
 
@@ -76,10 +76,8 @@ define([
                 callback();
                 return;
             }
-            
-            if (google.maps) {
-                this.setupWidget(callback);
-            } else {
+
+            if (!google.maps) {
                 logger.debug(this.id + ".update load Google maps");
                 var params = (this.apiAccessKey !== "") ? "key=" + this.apiAccessKey : "";
                 if (google.loader && google.loader.Secure === false) {
@@ -94,12 +92,25 @@ define([
                         this.setupWidget(callback);
                     })
                 });
+            } else {
+                if (this._googleMap) {
+                    logger.debug(this.id + ".update has _googleMap");
+                    this._fetchMarkers(callback);
+                    google.maps.event.trigger(this._googleMap, "resize");
+                } else {
+                    logger.debug(this.id + ".update has no _googleMap");
+                    if (window._googleMapsLoading) {
+                        this._waitForGoogleLoad(callback);
+                    } else {
+                        this.setupWidget(callback);
+                    }
+                }
             }
 
         },
-        
+
         setupWidget: function (callback) {
-            
+
             // Placeholder container
             this._mapContainer = document.createElement("div");
             if (this.mapClass) {
@@ -128,7 +139,7 @@ define([
             this.domNode.appendChild(this._button);
 
             this._setupEvents();
-                        
+
             this._googleMap = new google.maps.Map(this._mapContainer, {
                 zoom: this.defaultZoom,
                 center: new google.maps.LatLng(this.defaultLat, this.defaultLng),
@@ -138,7 +149,7 @@ define([
                 }
             });
             this._showMarker();
-            
+
             callback();
         },
 
@@ -160,7 +171,7 @@ define([
             // Clean up listeners, helper objects, etc. There is no need to remove listeners added with this.connect / this.subscribe / this.own.
             this._marker.setMap(null);
             this._marker = null;
-            
+
             window[this.id + "_mapsCallback"] = null;
         },
 
@@ -201,7 +212,7 @@ define([
 
             var geocoder,
                 latlng;
-            
+
             this._contextObj.set(this.latAttr, latitude.toFixed(8));
             this._contextObj.set(this.longAttr, longitude.toFixed(8));
             this._showMarker();
@@ -215,10 +226,10 @@ define([
                 }, dojoLang.hitch(this, this._reverseGeoCodingSuccess));
             }
         },
-        
+
         _showMarker: function () {
             var latLng;
-            
+
             if (this._marker === null) {
                 this._marker = new google.maps.Marker({
                     map: this._googleMap,
@@ -239,10 +250,10 @@ define([
                 this._marker.setTitle(this._contextObj.get(this.markerDisplayAttr));
             }
         },
-        
+
         _reverseGeoCodingSuccess: function (results, status) {
             var resultString;
-            
+
             if (status === google.maps.GeocoderStatus.OK) {
                 console.log("Reverse geocode OK");
                 //console.dir(results);
@@ -273,7 +284,7 @@ define([
                 this.domNode.appendChild(this._result);
             }
         },
-        
+
         _createLatLng: function () {
             var lat,
                 lng;
@@ -288,7 +299,7 @@ define([
             if (lng === null || lng === undefined) {
                 lng = 0;
             }
-            
+
             return new google.maps.LatLng(lat, lng);
         },
 
@@ -315,7 +326,7 @@ define([
                 this._handles = [];
             }
 
-            // When a mendix object exists create subscribtions. 
+            // When a mendix object exists create subscribtions.
             if (this._contextObj) {
                 var objectHandle = this.subscribe({
                     guid: this._contextObj.getGuid(),
