@@ -7,7 +7,7 @@
 @media (min-width: 992px) {
   /* line 7, /Users/marcelgroeneweg/Documents/GitHub/mendix-GeoLocationWidget/test/theme/styles/sass/custom/additional/_additional.scss */
   .profile-desktop .mapcontainer {
-    height: 700px;
+    height: 500px;
   }
 }
 

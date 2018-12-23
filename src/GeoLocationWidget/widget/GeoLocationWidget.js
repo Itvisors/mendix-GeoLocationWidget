@@ -25,8 +25,7 @@ define([
     "dojo/dom-style",
     "dojo/_base/lang",
     "dojo/html",
-    "dojo/_base/event",
-    "GeoLocationWidget/lib/jsapi"
+    "dojo/_base/event"
 ], function (declare, _WidgetBase, dojoClass, dojoStyle, dojoLang, dojoHtml, dojoEvent) {
     "use strict";
 
@@ -62,54 +61,6 @@ define([
         // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function () {
             //console.log(this.id + ".postCreate");
-        },
-
-        // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
-        update: function (obj, callback) {
-            //console.log(this.id + ".update");
-
-            this._contextObj = obj;
-            this._resetSubscriptions();
-
-            if (!google) {
-                console.warn("Google JSAPI is not loaded, exiting!");
-                callback();
-                return;
-            }
-
-            if (!google.maps) {
-                logger.debug(this.id + ".update load Google maps");
-                var params = (this.apiAccessKey !== "") ? "key=" + this.apiAccessKey : "";
-                if (google.loader && google.loader.Secure === false) {
-                    google.loader.Secure = true;
-                }
-                window._googleMapsLoading = true;
-                google.load("maps", 3, {
-                    other_params: params,
-                    callback: dojoLang.hitch(this, function () {
-                        logger.debug(this.id + ".update load Google maps callback");
-                        window._googleMapsLoading = false;
-                        this.setupWidget(callback);
-                    })
-                });
-            } else {
-                if (this._googleMap) {
-                    logger.debug(this.id + ".update has _googleMap");
-                    this._fetchMarkers(callback);
-                    google.maps.event.trigger(this._googleMap, "resize");
-                } else {
-                    logger.debug(this.id + ".update has no _googleMap");
-                    if (window._googleMapsLoading) {
-                        this._waitForGoogleLoad(callback);
-                    } else {
-                        this.setupWidget(callback);
-                    }
-                }
-            }
-
-        },
-
-        setupWidget: function (callback) {
 
             // Placeholder container
             this._mapContainer = document.createElement("div");
@@ -138,26 +89,74 @@ define([
             // Add to widget node
             this.domNode.appendChild(this._button);
 
-            this._setupEvents();
+            this.connect(this._button, "click", dojoLang.hitch(this, function (evt) {
+                //console.log("GEO Location start getting location.");
+
+                // Do geolocation
+                navigator.geolocation.getCurrentPosition(
+                    dojoLang.hitch(this, this._geolocationSucces),
+                    dojoLang.hitch(this, this._geolocationFailure),
+                    {timeout: 10000, enableHighAccuracy: true}
+                );
+            }));
+
+        },
+
+        // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
+        update: function (obj, callback) {
+            //console.log(this.id + ".update");
+
+            this._contextObj = obj;
+            this._resetSubscriptions();
+
+            if (this._contextObj) {
+                if (typeof google === "undefined" || typeof google.maps === "undefined") {
+                    this._loadGoogleApi(callback);
+                } else {
+                    this._showMap(callback);
+                }
+            }
+
+        },
+
+        _loadGoogleApi: function (callback) {
+
+            var refNode,
+                scriptElement,
+                thisObj = this;
+
+            // Find the first script node on the page.
+            refNode = window.document.getElementsByTagName("script")[0];
+            // Create a new script node and set the properties and callbacks
+            scriptElement = document.createElement("script");
+            scriptElement.async = true;
+            scriptElement.defer = true;
+            scriptElement.type = "text/javascript";
+            scriptElement.id = "googleScript";
+            scriptElement.src = "https://maps.googleapis.com/maps/api/js?key=" + this.apiAccessKey + "&libraries=places";
+            scriptElement.onerror = function (err) {
+                logger.error("GeoLocationWidget: loading Google API script failed. Check internet connection! ");
+            };
+            scriptElement.onload = function () {
+                thisObj._showMap(callback);
+            };
+            // Add the node to the page to activate it.
+            if (refNode && refNode.parentNode) {
+                refNode.parentNode.insertBefore(scriptElement, refNode);
+            }
+
+        },
+
+        _showMap: function (callback) {
 
             this._googleMap = new google.maps.Map(this._mapContainer, {
                 zoom: this.defaultZoom,
-                center: new google.maps.LatLng(this.defaultLat, this.defaultLng),
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                mapTypeControlOption: {
-                    style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR
-                }
+                center: new google.maps.LatLng(this.defaultLat, this.defaultLng)
             });
             this._showMarker();
 
             callback();
         },
-
-        // mxui.widget._WidgetBase.enable is called when the widget should enable editing. Implement to enable editing if widget is input widget.
-        enable: function () {},
-
-        // mxui.widget._WidgetBase.enable is called when the widget should disable editing. Implement to disable editing if widget is input widget.
-        disable: function () {},
 
         // mxui.widget._WidgetBase.resize is called when the page's layout is recalculated. Implement to do sizing calculations. Prefer using CSS instead.
         resize: function (box) {
@@ -180,20 +179,6 @@ define([
             if (typeof document.ontouchstart !== "undefined") {
                 dojoEvent.stop(e);
             }
-        },
-
-        // Attach events to HTML dom elements
-        _setupEvents: function () {
-            this.connect(this._button, "click", dojoLang.hitch(this, function (evt) {
-                //console.log("GEO Location start getting location.");
-
-                // The camera function has a success, failure and a reference to this.
-                navigator.geolocation.getCurrentPosition(
-                    dojoLang.hitch(this, this._geolocationSucces),
-                    dojoLang.hitch(this, this._geolocationFailure),
-                    {timeout: 10000, enableHighAccuracy: true}
-                );
-            }));
         },
 
         // Rerender the interface.
