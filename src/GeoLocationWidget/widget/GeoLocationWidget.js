@@ -303,15 +303,16 @@ define([
 
         // Reset subscriptions.
         _resetSubscriptions: function () {
+            var thisObj = this;
             // Release handles on previous object, if any.
             if (this._handles) {
                 this._handles.forEach(function (handle) {
-                    mx.data.unsubscribe(handle);
+                    thisObj.unsubscribe(handle);
                 });
                 this._handles = [];
             }
 
-            // When a mendix object exists create subscribtions.
+            // When a mendix object exists create subscriptions.
             if (this._contextObj) {
                 var objectHandle = this.subscribe({
                     guid: this._contextObj.getGuid(),

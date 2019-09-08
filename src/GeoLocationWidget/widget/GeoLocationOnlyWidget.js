@@ -9,13 +9,13 @@
     @version   : 1.2.2
     @author    : Marcel Groeneweg
     @date      : Fri, 2 Feb 2018
-    @copyright : 
+    @copyright :
     @license   : Apache 2
 
     Documentation
     ========================
     Use Google client library to get current location. The Google client library takes WiFi access points into account to determine the location.
-    This widget depends on the original GoogleMaps widget for the AMD loader. 
+    This widget depends on the original GoogleMaps widget for the AMD loader.
 */
 
 define([
@@ -50,7 +50,7 @@ define([
         constructor: function () {
             this._handles = [];
         },
-        
+
         // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function () {
             //console.log(this.id + ".postCreate");
@@ -59,16 +59,16 @@ define([
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function (obj, callback) {
             //console.log(this.id + ".update");
-            
+
             this._contextObj = obj;
             this._resetSubscriptions();
 
             this.setupWidget(callback);
 
         },
-        
+
         setupWidget: function (callback) {
-            
+
             // Button
             this._button = document.createElement("div");
             dojoClass.add(this._button, "btn");
@@ -84,7 +84,7 @@ define([
             this.domNode.appendChild(this._button);
 
             this._setupEvents();
-            
+
             callback();
         },
 
@@ -132,7 +132,7 @@ define([
         },
 
         _setCurrentLocation: function (latitude, longitude) {
-            
+
             this._contextObj.set(this.latAttr, latitude.toFixed(8));
             this._contextObj.set(this.longAttr, longitude.toFixed(8));
         },
@@ -154,15 +154,16 @@ define([
 
         // Reset subscriptions.
         _resetSubscriptions: function () {
+            var thisObj = this;
             // Release handles on previous object, if any.
             if (this._handles) {
                 this._handles.forEach(function (handle) {
-                    mx.data.unsubscribe(handle);
+                    thisObj.unsubscribe(handle);
                 });
                 this._handles = [];
             }
 
-            // When a mendix object exists create subscribtions. 
+            // When a mendix object exists create subscriptions.
             if (this._contextObj) {
                 var objectHandle = this.subscribe({
                     guid: this._contextObj.getGuid(),
