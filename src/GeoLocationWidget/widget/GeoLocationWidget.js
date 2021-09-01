@@ -1,6 +1,6 @@
 /*jshint undef: true, browser:true, nomen: true */
 /*jslint browser:true, nomen: true */
-/*global mx, define, require, console, google, logger */
+/*global mx, define, require, console, google */
 /*
     GeoLocationWidget
     ========================
@@ -135,7 +135,7 @@ define([
             scriptElement.id = "googleScript";
             scriptElement.src = "https://maps.googleapis.com/maps/api/js?key=" + this.apiAccessKey + "&libraries=places";
             scriptElement.onerror = function (err) {
-                logger.error("GeoLocationWidget: loading Google API script failed. Check internet connection! ");
+                mx.logger.error("GeoLocationWidget: loading Google API script failed. Check internet connection! ");
             };
             scriptElement.onload = function () {
                 thisObj._showMap(callback);
